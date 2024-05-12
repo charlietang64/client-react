@@ -10,7 +10,7 @@ const LoginPage = (props) => {
   const onLogin = (e) => {
     e.preventDefault();
     axios
-      .post(`http://192.168.68.127:3001/login`, { username, secret })
+      .post(`https://192.168.68.127:3001/login`, { username, secret })
       .then((r) => props.onAuth({ ...r.data, secret })) // NOTE: over-ride secret
       .catch((e) => console.log(JSON.stringify(e.response.data)));
   };
