@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import SignupPage from "./signup";
 
@@ -7,12 +7,24 @@ const LoginPage = (props) => {
   const [secret, setSecret] = useState();
   const [showSignUp, setSignUp] = useState(false);
 
+  useEffect(() => {
+    document.title = showSignUp ? 'Sign up' : 'Login';
+}, [showSignUp]);
+
   const onLogin = (e) => {
     e.preventDefault();
     axios
-      .post(`https://192.168.68.127:3001/login`, { username, secret })
-      .then((r) => props.onAuth({ ...r.data, secret })) // NOTE: over-ride secret
-      .catch((e) => console.log(JSON.stringify(e.response.data)));
+      .post(`http://34.16.165.166:3001/login`, { username, secret })
+      .then((r) => {
+        if (r && r.data) {
+          props.onAuth({ ...r.data, secret });
+        } else {
+          console.log("Response or data is undefined:", r);
+        }
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   };
 
   // Function to toggle the showSignUp state

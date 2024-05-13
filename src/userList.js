@@ -7,7 +7,7 @@ const UserList = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/users');
+            const response = await axios.get('http://34.16.165.166:3001/users');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -20,7 +20,7 @@ const UserList = () => {
 
     const deleteUser = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/users/${id}`);
+            const response = await axios.delete(`http://34.16.165.166:3001/users/${id}`);
             if (response.status === 200) {
                 // If the deletion is successful, fetch the updated user list
                 fetchUsers();

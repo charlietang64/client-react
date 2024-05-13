@@ -6,6 +6,10 @@ const Chat = (props) => {
     const [showCommunity, setShowCommunity] = useState(false);
     const chatWindowRef = useRef(null); // Create a ref for the chat window
 
+    useEffect(() => {
+        document.title = showCommunity ? 'Community Chat' : 'Direct Messages';
+    }, [showCommunity]);
+
     const handleIconClick = () => {
         // Show the CommunityPage when the house icon is clicked
         setShowCommunity(true);
