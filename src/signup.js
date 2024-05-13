@@ -13,7 +13,7 @@ const SignupPage = (props) => {
   const onSignup = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.16.165.166:3001/signup", {
+      .post("http://34.16.45.129:3001/signup", {
         username,
         secret,
         email,

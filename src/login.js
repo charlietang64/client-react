@@ -14,7 +14,7 @@ const LoginPage = (props) => {
   const onLogin = (e) => {
     e.preventDefault();
     axios
-      .post(`http://34.16.165.166:3001/login`, { username, secret })
+      .post(`http://34.16.45.129:3001/login`, { username, secret })
       .then((r) => {
         if (r && r.data) {
           props.onAuth({ ...r.data, secret });
