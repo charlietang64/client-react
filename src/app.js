@@ -21,7 +21,7 @@ function App() {
   };
 
   // Conditional rendering based on the user's authentication status
-  if (!user) {
+  if (!user || user.username === undefined) {
     // If no user is authenticated, render the authentication page
     return <Login onAuth={handleAuth} />;
   }

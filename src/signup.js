@@ -1,19 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import LoginPage from "./login";
+import Modal from "react-modal";
 
+/**
+ * SignupPage Component
+ * 
+ * This component renders a signup form that allows users to create a new account. The form includes fields for username, password, email, first name, and last name. It also performs client-side validation for the password and email fields.
+ * 
+ * State Variables:
+ * - username: The username entered by the user.
+ * - secret: The password entered by the user.
+ * - email: The email entered by the user.
+ * - first_name: The first name entered by the user.
+ * - last_name: The last name entered by the user.
+ * - showLogin: A boolean that controls whether to display the login page.
+ * - errorMessage: A string that holds error messages related to username or signup process.
+ * - passwordError: A string that holds error messages related to password validation.
+ * - emailError: A string that holds error messages related to email validation.
+ * - showModal: A boolean that controls the display of the success modal.
+ * - successMessage: A string that holds the success message to be displayed in the modal.
+ * 
+ * Functions:
+ * - onSignup: Handles the form submission, validates inputs, and sends a signup request to the server.
+ * - toggleLogin: Toggles the display of the login page.
+ * 
+ * useEffect Hooks:
+ * - Validates the password to ensure it is at least 8 characters long and contains at least one numerical value.
+ * - Validates the email to ensure it is from the "greenriver.edu" domain.
+ * - Clears the error message when the username is updated.
+ * 
+ * Usage:
+ * ```
+ * <SignupPage onAuth={yourAuthHandler} />
+ * ```
+ * 
+ * Notes:
+ * - The `onAuth` prop should be a function that handles the authentication logic after a successful signup.
+ * - Make sure to configure the `axios` requests to point to the correct API endpoints.
+ * 
+ */
 const SignupPage = (props) => {
-  const [username, setUsername] = useState();
-  const [secret, setSecret] = useState();
-  const [email, setEmail] = useState();
-  const [first_name, setFirstName] = useState();
-  const [last_name, setLastName] = useState();
+  const [username, setUsername] = useState("");
+  const [secret, setSecret] = useState("");
+  const [email, setEmail] = useState("");
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
   const [showLogin, setLogin] = useState(false);
+  const [errorMessage, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
+  /**
+   * Handles the form submission for signup.
+   * Validates the form inputs and sends a signup request to the server.
+   * Displays success or error messages based on the response.
+   */
   const onSignup = (e) => {
     e.preventDefault();
+
+    // Check if there are any errors
+    if (passwordError || errorMessage || emailError) {
+      return; // Prevent form submission if there are errors
+    }
+
     axios
-      .post("http://34.16.45.129:3001/signup", {
+      .post("https://chat-app-v84a.onrender.com/signup", {
         username,
         secret,
         email,
@@ -21,58 +75,107 @@ const SignupPage = (props) => {
         last_name,
       }, {
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         }
       })
-      .then((r) => props.onAuth({ ...r.data, secret })) // NOTE: over-ride secret
-      .catch((e) => console.log(JSON.stringify(e.response.data)));
+      .then((r) => {
+        props.onAuth({ ...r.data, secret });
+        setShowModal(true);
+        setSuccessMessage("Sign up successful! Please check your email to verify your account.");
+      })
+      .catch((error) => {
+        if (error.response) {
+          setError("Username already exists");
+        } else {
+          console.log("Error");
+        }
+      });
   };
 
-    // Function to toggle the showLogin state
-    const toggleLogin = () => {
-        setLogin(!showLogin);
-    };
-
-    if (showLogin) {
-        // Display the SignupPage component if showSignUp is true
-        return <LoginPage {...props} />;
+  /**
+   * Validates the password to ensure it meets the requirements.
+   */
+  useEffect(() => {
+    if (secret.length > 0 && (secret.length < 8 || !/\d/.test(secret))) {
+      setPasswordError("Password must be at least 8 characters long and include at least one numerical value");
+    } else {
+      setPasswordError("");
     }
+  }, [secret]);
 
+  /**
+   * Validates the email to ensure it is from the "greenriver.edu" domain.
+   */
+  useEffect(() => {
+    if (!email.endsWith("greenriver.edu")) {
+      setEmailError("Email must be from a greenriver.edu domain");
+    } else {
+      setEmailError("");
+    }
+  }, [email]);
 
+  /**
+   * Clears the error message when the username is updated.
+   */
+  useEffect(() => {
+    setError("");
+  }, [username]);
+
+  /**
+   * Toggles the display of the login page.
+   */
+  const toggleLogin = () => {
+    setLogin(!showLogin);
+  };
+
+  if (showLogin) {
+    // Display the LoginPage component if showLogin is true
+    return <LoginPage {...props} />;
+  }
+
+  
   return (
     <div className="login-page">
-    <div className="card">
+      <div className="card">
       <form onSubmit={onSignup}>
         <div className="title">Sign Up</div>
+        {errorMessage && <div style={{ color: "red"}}>{errorMessage}</div>}
         <input
           type="text"
           name="username"
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
+          required
         />
+        {passwordError && <div style={{ color: "red"}}>{passwordError}</div>}
         <input
           type="password"
           name="secret"
           placeholder="Password"
           onChange={(e) => setSecret(e.target.value)}
+          required
         />
+        {emailError && <div style={{ color:"red" }}>{emailError}</div>}
         <input
           type="text"
           name="email"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="text"
           name="first_name"
           placeholder="First name"
           onChange={(e) => setFirstName(e.target.value)}
+          required
         />
         <input
           type="text"
           name="last_name"
           placeholder="Last name"
           onChange={(e) => setLastName(e.target.value)}
+          required
         />
         <button id="submit" type="submit">SIGN UP</button>
       </form>
@@ -145,8 +248,17 @@ const SignupPage = (props) => {
     background-color: rgba(0, 86, 63, 0.1); /* Lighter green on hover */
   }
 `}</style>
+    <Modal
+      isOpen={showModal}
+      onRequestClose={() => setShowModal(false)}
+      contentLabel="Success Modal"
+      >
+        <h2>Success!</h2>
+        <p>{successMessage}</p>
+        <button onClick={() => setShowModal(false)}>Close</button>
+      </Modal>
     </div>
-    </div>
+  </div>
   );
 };
 

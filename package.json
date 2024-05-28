@@ -13,6 +13,8 @@
     "react-chat-engine-advanced": "^0.1.25",
     "react-chat-engine-pretty": "^0.1.5",
     "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },

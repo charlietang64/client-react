@@ -1,45 +1,57 @@
-# Connect React to Chat Engine!
+# Green River College Chat App
 
-This simple repo shows how to easily add chat functionality into a React project with [Chat Engine](https://chatengine.io).
+This is a chat application built with React.js, designed specifically for Green River College students and staff. The application provides a secure and user-friendly platform for direct messaging and community discussions.
 
-To understand the code, please watch [this video]()!
+## Features
 
-## Setup Steps
+- User authentication (signup, login, and email verification)
+- Direct messaging between users
+- Community chat room
+- Admin panel for user management (view, delete users)
+- Client-side form validation
+- Responsive design
 
-Setup this chat client in 3 steps below.
+## Technologies Used
 
-These steps assume you have already setup one of the server projects in `../server-*` (for example, `server-express`).
+- React.js
+- Axios (for API requests)
+- react-chat-engine (for chat functionality)
 
-### 1 - Setup a Chat Engine server
+## Getting Started
 
-Go to [Chat Engine](https://chatengine.io) to setup your own chat server.
+1. Clone the repository:
+git clone https://github.com/your-repo/green-river-chat-app.git
 
-- Click "New Project" and follow the steps
-- Your `Project ID` and `Private Key` will be required for step 2
+2. Install dependencies:
+- cd green-river-chat-app
+- npm install
 
-### 2 - Connect `.env` to Chat Engine
+3. Configure the necessary environment variables for the API endpoints and Chat Engine project credentials.
 
-We will connect to your Chat Engine server with environment varibles.
+4. Start the development server:
+- npm start
 
-This allows you to connect to different chat-servers in local vs staging vs production.
+5. Open your web browser and navigate to `http://localhost:3000` to see the application.
 
-Replace the UUID below with your own. In `.env` write:
+## Usage
 
-```
-REACT_APP_CHAT_ENGINE_PROJECT_ID=5d498a31-cd23-42b7-b367-4fcc9463bd2f
-```
+### Authentication
 
-### 3 - Install & Start
+- Users can sign up for a new account by providing their username, password, email, first name, and last name. Email addresses must be from the `greenriver.edu` domain.
+- After signing up, users will receive a verification email to confirm their account.
+- Existing users can log in with their username and password.
 
-Run the following two lines of code in `client-react/`.
+### Chat
 
-```
-npm install
-npm run start
-```
+- Authenticated users can access the direct messaging feature, which allows them to chat with other users.
+- Users can also join the community chat room by clicking the house icon in the chat interface.
 
-Done! Your Express server is on `localhost:3000` and connected to Chat Engine!
+### Admin Panel
 
-All new "Sign Up" users are on Chat Engine, and their credentiuals are found upon "Login".
+- Users with the username 'admin' will be redirected to the admin panel upon login.
+- The admin panel displays a list of all registered users.
+- Admins can delete users from the list, except for the 'admin' user.
 
-To understand the code, please watch [this video]()!
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
